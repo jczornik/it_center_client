@@ -6,7 +6,7 @@ static SERVER_ADDRESS: &str = "http://localhost:8080";
 
 #[tokio::main]
 async fn main() {
-    let response = messages::download_messages().await;
+    let response = messages::download_all_new_messages().await;
 
     let response = response.unwrap();
 
