@@ -28,7 +28,7 @@ pub enum ProcessingMessageError {
 
 #[derive(Debug, Deserialize)]
 pub struct MessageDTO {
-    pub uuid: String,
+    pub id: String,
     pub sender: String,
     pub title: String,
     pub message: String,
@@ -63,7 +63,7 @@ async fn send_request(
 }
 
 pub async fn ack_message_reception(message_id: &str) -> Result<(), ProcessingMessageError> {
-    let api = format!("{}/{}/{}", API_ACK_MESSAGES, API_ACK_RECEPTION, message_id);
+    let api = format!("/{}/{}/{}", API_ACK_MESSAGES, API_ACK_RECEPTION, message_id);
 
     let _ = send_request(
         api.as_str(),
@@ -75,7 +75,7 @@ pub async fn ack_message_reception(message_id: &str) -> Result<(), ProcessingMes
 }
 
 pub async fn download_all_messages() -> Result<Vec<MessageDTO>, ProcessingMessageError> {
-    let api = format!("{}/{}", API_MESAGES, API_ALL_MESSAGES);
+    let api = format!("/{}/{}", API_MESAGES, API_ALL_MESSAGES);
 
     let response = send_request(
         api.as_str(),
@@ -95,7 +95,7 @@ pub async fn download_all_messages() -> Result<Vec<MessageDTO>, ProcessingMessag
 }
 
 pub async fn download_all_new_messages() -> Result<Vec<MessageDTO>, ProcessingMessageError> {
-    let api = format!("{}/{}/New", API_MESAGES, API_ALL_MESSAGES_WITH_STATUS);
+    let api = format!("/{}/{}/New", API_MESAGES, API_ALL_MESSAGES_WITH_STATUS);
 
     let resposne = send_request(
         api.as_str(),
