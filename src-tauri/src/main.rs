@@ -1,3 +1,6 @@
+// Prevents additional console window on Windows in release, DO NOT REMOVE!!
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+
 mod messages;
 
 use messages::MessageDTO;
@@ -33,11 +36,21 @@ async fn notify_thread(mut rx: Receiver<MessagesReceived>) {
     }
 }
 
-#[tokio::main]
-async fn main() {
-    let (tx, rx) = tokio::sync::watch::channel(MessagesReceived::new());
-    let handle = tokio::spawn(async move { download_messages_thread(tx).await });
-    let handle2 = tokio::spawn(async move { notify_thread(rx).await });
-    let _ = tokio::join!(handle);
-    let _ = tokio::join!(handle2);
+// Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
+#[tauri::command]
+fn greet(name: &str) -> String {
+    format!("Hello, {}! You've been greeted from Rust!", name)
+}
+
+fn main() {
+    tauri::Builder::default()
+        .setup(|_| {
+            let (tx, rx) = tokio::sync::watch::channel(MessagesReceived::new());
+            tauri::async_runtime::spawn(async move { notify_thread(rx).await });
+            tauri::async_runtime::spawn(async move { download_messages_thread(tx).await });
+            Ok(())
+        })
+        .invoke_handler(tauri::generate_handler![greet])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
 }

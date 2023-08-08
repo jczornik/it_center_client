@@ -1,0 +1,28 @@
+[package]
+name = "it_center_client"
+version = "0.0.0"
+description = "A Tauri App"
+authors = ["Janusz Czornik"]
+license = "GPLv3"
+repository = "https://github.com/jczornik/it_center_client"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[build-dependencies]
+tauri-build = { version = "1.4", features = [] }
+
+[dependencies]
+derive_more = "0.99.17"
+futures = "0.3.28"
+notify-rust = "4.8.0"
+reqwest = "0.11.18"
+tokio = { version = "1.29.1", features = ["full"] }
+tauri = { version = "1.4", features = ["shell-open"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+[features]
+# this feature is used for production builds or when `devPath` points to the filesystem
+# DO NOT REMOVE!!
+custom-protocol = ["tauri/custom-protocol"]
