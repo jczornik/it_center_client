@@ -1,5 +1,5 @@
 use reqwest::{Request, Response};
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
 use crate::SERVER_ADDRESS;
 
@@ -14,7 +14,7 @@ static API_ACK_RECEPTION: &str = "reception";
 static USER_NAME: &str = "admin";
 static USER_PASSWORD: &str = "admin";
 
-#[derive(Debug, Display, Error)]
+#[derive(Debug, Display, Error, Serialize)]
 pub enum ProcessingMessageError {
     #[display(fmt = "Error while downloading message")]
     DownloadingMessageError,
@@ -26,7 +26,7 @@ pub enum ProcessingMessageError {
     UnauthorizedRequest,
 }
 
-#[derive(Debug, Deserialize)]
+#[derive(Debug, Deserialize, Serialize)]
 pub struct MessageDTO {
     pub id: String,
     pub sender: String,
@@ -74,6 +74,7 @@ pub async fn ack_message_reception(message_id: &str) -> Result<(), ProcessingMes
     Ok(())
 }
 
+#[tauri::command]
 pub async fn download_all_messages() -> Result<Vec<MessageDTO>, ProcessingMessageError> {
     let api = format!("/{}/{}", API_MESAGES, API_ALL_MESSAGES);
 

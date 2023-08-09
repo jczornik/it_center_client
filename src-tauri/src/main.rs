@@ -3,7 +3,7 @@
 
 mod messages;
 
-use messages::MessageDTO;
+use messages::{MessageDTO, ProcessingMessageError};
 use notify_rust::Notification;
 use tokio::sync::watch::{Receiver, Sender};
 
@@ -46,11 +46,14 @@ fn main() {
     tauri::Builder::default()
         .setup(|_| {
             let (tx, rx) = tokio::sync::watch::channel(MessagesReceived::new());
-            tauri::async_runtime::spawn(async move { notify_thread(rx).await });
-            tauri::async_runtime::spawn(async move { download_messages_thread(tx).await });
+            // tauri::async_runtime::spawn(async move { notify_thread(rx).await });
+            // tauri::async_runtime::spawn(async move { download_messages_thread(tx).await });
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            messages::download_all_messages,
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

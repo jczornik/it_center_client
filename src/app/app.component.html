@@ -1,18 +1,15 @@
-<div class="container">
-  <h1>Welcome to Tauri + Angular!</h1>
-  <div class="row">
-    <a href="https://tauri.app" target="_blank">
-      <img src="/assets/tauri.svg" class="logo tauri" alt="Tauri logo" />
-    </a>
-    <a href="https://angular.io" target="_blank">
-      <img src="/assets/angular.svg" class="logo angular" alt="Angular logo" />
-    </a>
-  </div>
-  <p>Click on the logos to learn more about the frameworks</p>
-
-  <form class="row" (submit)="greet($event, greetInput.value)">
-    <input #greetInput id="greet-input" placeholder="Enter a name..." />
-    <button type="submit">Greet</button>
-  </form>
-  <p>{{ greetingMessage }}</p>
-</div>
+<mat-toolbar>
+  <span>IT Center</span>
+</mat-toolbar>
+<mat-drawer-container style="height: 100vh">
+  <mat-drawer mode="side" opened class="nav">
+    <button mat-button color="primary">Messages</button>
+    <button mat-button color="disabled">Tickets</button>
+    <button mat-button color="disabled">Support</button>
+    <button mat-button color="disabled">Help</button>
+    <button mat-button color="disabled">Info</button>
+  </mat-drawer>
+  <mat-drawer-content>
+    <app-message-dashboard />
+  </mat-drawer-content>
+</mat-drawer-container>
